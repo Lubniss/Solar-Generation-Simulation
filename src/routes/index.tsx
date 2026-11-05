@@ -4,10 +4,12 @@ import {
   Area, AreaChart, CartesianGrid, ReferenceDot, ReferenceLine, ResponsiveContainer,
   Scatter, ComposedChart, Tooltip, XAxis, YAxis, Line,
 } from "recharts";
-import { Sun, Battery, Activity, Clock } from "lucide-react";
+import { Sun, Battery, Activity, Clock, Lightbulb, Home, Car, Smartphone } from "lucide-react";
 import {
-  analyze, fmtTime, LOCATION, THRESHOLD, WEATHER, type Location, type Weather,
+  analyze, fmtTime, equivalents, LOCATION, THRESHOLD, WEATHER, type Location, type Weather,
 } from "@/lib/solar";
+
+const EQUIV_ICONS = { bulbs: Lightbulb, homes: Home, evs: Car, phones: Smartphone } as const;
 
 export const Route = createFileRoute("/")({
   head: () => ({
