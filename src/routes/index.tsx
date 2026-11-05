@@ -126,7 +126,7 @@ function Index() {
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <Metric icon={Battery} label="Total Energy Generated" value={`${r.energy.toFixed(1)} kWh`} sub="Trapezoidal rule integration" />
             <Metric icon={Activity} label="Data Health" value={`${r.reconstructedPct.toFixed(1)}%`} sub={`${r.missingCount} daylight readings reconstructed`} />
-            <Metric icon={Clock} label={`Crosses ${THRESHOLD} kW`} value={start !== undefined ? `${fmtTime(start)} – ${fmtTime(end)}` : "Not reached"} sub="Bisection root finding" />
+            <Metric icon={Clock} label={`Crosses ${THRESHOLD} kW`} value={start !== undefined ? `${fmtTime(start)} – ${fmtTime(end!)}` : "Not reached"} sub="Bisection root finding" />
             <Metric icon={Sun} label="Peak Output" value={`${r.peak.toFixed(1)} kW`} sub={`${r.daylightHours} h of daylight`} />
           </div>
         </section>

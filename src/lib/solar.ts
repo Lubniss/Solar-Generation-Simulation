@@ -48,7 +48,7 @@ export function interpolate(values: (number | null)[]): number[] {
 /** Trapezoidal rule. */
 export function trapezoid(ys: number[], h: number): number {
   let s = 0;
-  for (let i = 1; i < ys.length; i++) s += ((ys[i - 1] + ys[i]) * h) / 2;
+  for (let i = 1; i < ys.length; i++) s += ((ys[i - 1]! + ys[i]!) * h) / 2;
   return s;
 }
 
@@ -91,16 +91,16 @@ export function analyze(weather: Weather, location: Location) {
     reconstructed: raw[i] === null ? +p.toFixed(2) : null,
   }));
   const missingCount = raw.filter((v) => v === null).length;
-  const daylight = filled.filter((_, i) => truth[i] > 0).length || 1;
+  const daylight = filled.filter((_, i) => truth[i]! > 0).length || 1;
 
   const f = (t: number) => {
     const i = Math.min(Math.floor(t / STEP), n - 2);
     const fr = t / STEP - i;
-    return filled[i] + (filled[i + 1] - filled[i]) * fr;
+    return filled[i]! + (filled[i + 1]! - filled[i]!) * fr;
   };
   const crossings: number[] = [];
   for (let i = 1; i < n; i++) {
-    const a = filled[i - 1] - THRESHOLD, b = filled[i] - THRESHOLD;
+    const a = filled[i - 1]! - THRESHOLD, b = filled[i]! - THRESHOLD;
     if (a * b < 0) crossings.push(bisect(f, (i - 1) * STEP, i * STEP, THRESHOLD));
   }
 
