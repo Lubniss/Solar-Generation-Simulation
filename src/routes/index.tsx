@@ -145,6 +145,19 @@ function Index() {
             <Metric icon={Clock} label={`Crosses ${THRESHOLD} kW`} value={start !== undefined ? `${fmtTime(start)} – ${fmtTime(end!)}` : "Not reached"} sub="Bisection root finding" />
             <Metric icon={Sun} label="Peak Output" value={`${r.peak.toFixed(1)} kW`} sub={`${r.daylightHours} h of daylight`} />
           </div>
+
+          <div className="rounded-xl border bg-card p-5 shadow-[var(--shadow-soft)]">
+            <h2 className="text-xl font-semibold">What does this mean?</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Your {r.energy.toFixed(1)} kWh of generation, in everyday terms:
+            </p>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              {eq.map((e) => {
+                const Icon = EQUIV_ICONS[e.id];
+                return <Equivalent key={e.id} icon={Icon} title={e.title} value={e.value} sub={e.sub} />;
+              })}
+            </div>
+          </div>
         </section>
       </main>
     </div>
