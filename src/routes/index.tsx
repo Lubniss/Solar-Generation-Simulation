@@ -4,10 +4,12 @@ import {
   Area, AreaChart, CartesianGrid, ReferenceDot, ReferenceLine, ResponsiveContainer,
   Scatter, ComposedChart, Tooltip, XAxis, YAxis, Line,
 } from "recharts";
-import { Sun, Battery, Activity, Clock } from "lucide-react";
+import { Sun, Battery, Activity, Clock, Lightbulb, Home, Car, Smartphone } from "lucide-react";
 import {
-  analyze, fmtTime, LOCATION, THRESHOLD, WEATHER, type Location, type Weather,
+  analyze, fmtTime, equivalents, LOCATION, THRESHOLD, WEATHER, type Location, type Weather,
 } from "@/lib/solar";
+
+const EQUIV_ICONS = { bulbs: Lightbulb, homes: Home, evs: Car, phones: Smartphone } as const;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -60,10 +62,24 @@ function Metric({ icon: Icon, label, value, sub }: { icon: typeof Sun; label: st
   );
 }
 
+function Equivalent({ icon: Icon, title, value, sub }: { icon: typeof Sun; title: string; value: string; sub: string }) {
+  return (
+    <div className="flex items-start gap-3 rounded-xl border bg-secondary/50 p-4">
+      <div className="rounded-full bg-sun/20 p-2.5"><Icon className="h-5 w-5 text-sun" /></div>
+      <div>
+        <div className="text-sm font-semibold">{title}</div>
+        <div className="mt-0.5 text-2xl font-bold leading-tight">{value}</div>
+        <div className="mt-0.5 text-sm text-muted-foreground">{sub}</div>
+      </div>
+    </div>
+  );
+}
+
 function Index() {
   const [weather, setWeather] = useState<Weather>("sunny");
   const [location, setLocation] = useState<Location>("equator");
   const r = useMemo(() => analyze(weather, location), [weather, location]);
+  const eq = useMemo(() => equivalents(r.energy), [r.energy]);
   const [start, end] = [r.crossings[0], r.crossings[r.crossings.length - 1]];
 
   return (
@@ -128,6 +144,19 @@ function Index() {
             <Metric icon={Activity} label="Data Health" value={`${r.reconstructedPct.toFixed(1)}%`} sub={`${r.missingCount} daylight readings reconstructed`} />
             <Metric icon={Clock} label={`Crosses ${THRESHOLD} kW`} value={start !== undefined ? `${fmtTime(start)} – ${fmtTime(end!)}` : "Not reached"} sub="Bisection root finding" />
             <Metric icon={Sun} label="Peak Output" value={`${r.peak.toFixed(1)} kW`} sub={`${r.daylightHours} h of daylight`} />
+          </div>
+
+          <div className="rounded-xl border bg-card p-5 shadow-[var(--shadow-soft)]">
+            <h2 className="text-xl font-semibold">What does this mean?</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Your {r.energy.toFixed(1)} kWh of generation, in everyday terms:
+            </p>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              {eq.map((e) => {
+                const Icon = EQUIV_ICONS[e.id];
+                return <Equivalent key={e.id} icon={Icon} title={e.title} value={e.value} sub={e.sub} />;
+              })}
+            </div>
           </div>
         </section>
       </main>

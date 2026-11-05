@@ -115,6 +115,24 @@ export function analyze(weather: Weather, location: Location) {
   };
 }
 
+export interface Equivalent {
+  id: "bulbs" | "homes" | "evs" | "phones";
+  title: string;
+  value: string;
+  sub: string;
+}
+
+/** Real-world equivalents of a total energy figure E (kWh). */
+export function equivalents(E: number): Equivalent[] {
+  const fmt = (n: number) => Math.round(n).toLocaleString("en-US");
+  return [
+    { id: "bulbs", title: "Light Bulbs", value: `${fmt(E * 100)} hours`, sub: "lit by a 10 W LED bulb" },
+    { id: "homes", title: "Average Homes", value: `${fmt(E / 30)} days`, sub: "of power for an average home" },
+    { id: "evs", title: "Electric Vehicles", value: `${fmt(E * 3.5)} miles`, sub: "of driving in a standard EV" },
+    { id: "phones", title: "Smartphones", value: `${fmt(E / 0.015)} charges`, sub: "full smartphone charges" },
+  ];
+}
+
 export function fmtTime(t: number) {
   const h = Math.floor(t);
   const m = Math.round((t - h) * 60);
