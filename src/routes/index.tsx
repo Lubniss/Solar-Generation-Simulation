@@ -79,6 +79,7 @@ function Index() {
   const [weather, setWeather] = useState<Weather>("sunny");
   const [location, setLocation] = useState<Location>("equator");
   const r = useMemo(() => analyze(weather, location), [weather, location]);
+  const eq = useMemo(() => equivalents(r.energy), [r.energy]);
   const [start, end] = [r.crossings[0], r.crossings[r.crossings.length - 1]];
 
   return (
