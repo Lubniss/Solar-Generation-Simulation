@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { analyze, interpolate, trapezoid, bisect } from "./solar";
+import { analyze, interpolate, trapezoid, bisect, equivalents } from "./solar";
 
 describe("solar numerics", () => {
   it("interpolates a gap linearly", () => {
