@@ -62,6 +62,19 @@ function Metric({ icon: Icon, label, value, sub }: { icon: typeof Sun; label: st
   );
 }
 
+function Equivalent({ icon: Icon, title, value, sub }: { icon: typeof Sun; title: string; value: string; sub: string }) {
+  return (
+    <div className="flex items-start gap-3 rounded-xl border bg-secondary/50 p-4">
+      <div className="rounded-full bg-sun/20 p-2.5"><Icon className="h-5 w-5 text-sun" /></div>
+      <div>
+        <div className="text-sm font-semibold">{title}</div>
+        <div className="mt-0.5 text-2xl font-bold leading-tight">{value}</div>
+        <div className="mt-0.5 text-sm text-muted-foreground">{sub}</div>
+      </div>
+    </div>
+  );
+}
+
 function Index() {
   const [weather, setWeather] = useState<Weather>("sunny");
   const [location, setLocation] = useState<Location>("equator");
